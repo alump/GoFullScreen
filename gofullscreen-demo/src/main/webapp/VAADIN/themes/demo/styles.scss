@@ -1,0 +1,12 @@
+@import "../reindeer/reindeer.scss";
+@include reindeer;
+
+.demo-image {
+    width: 320px;
+    height: 240px;
+}
+
+.demo-image:-webkit-full-screen, demo-image:-moz-full-screen {
+    width: 640px;
+    height: 480px;
+}
