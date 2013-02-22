@@ -7,7 +7,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.vaadin.client.BrowserInfo;
-import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
@@ -20,6 +19,7 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
 	
 	private JavaScriptObject fullscreenTarget;
 	private boolean isInFullScreen = false;
+	private boolean changeListenerAttached = false;
 	
     private final GoFullScreenServerRpc serverRpc = RpcProxy.create(
     		GoFullScreenServerRpc.class, this);
@@ -42,14 +42,26 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
     public void onStateChanged(StateChangeEvent stateChangeEvent) {
     	super.onStateChanged(stateChangeEvent);
     	
-    	if (getState().fullscreenTarget == null) {
-    		fullscreenTarget = null;
-    	} else {
-    		fullscreenTarget = ((AbstractComponentConnector) (getState().fullscreenTarget)).getWidget().getElement();
+    	if (fullscreenTarget != getState().fullscreenTarget) {
+	    	if (getState().fullscreenTarget == null) {
+	    		fullscreenTarget = null;
+	    	} else {
+	    		fullscreenTarget = ((AbstractComponentConnector) (getState().fullscreenTarget)).getWidget().getElement();
+	    	}
+	    	notifyStateChange();
     	}
     	
     	if (!isBrowserSupported()) {
     		getWidget().setVisible(false);
+    	} else if (!changeListenerAttached) {
+			if (BrowserInfo.get().isChrome()) {
+				attachFullScreenChangeListener("webkitfullscreenchange");
+			} else if (BrowserInfo.get().isGecko()) {
+				attachFullScreenChangeListener("mozfullscreenchange");
+			} else {
+				attachFullScreenChangeListener("fullscreenchange");	
+			}
+			changeListenerAttached = true;
     	}
     }
     
@@ -63,11 +75,11 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
 		public void onClick(ClickEvent event) {
 			JavaScriptObject target = getTargetElement();
 			if (isInFullScreenMode(target)) {
-				VConsole.log("FullScreen: toogle off");
+				//VConsole.log("FullScreen: toogle off");
 				cancelFullScreen();
 				notifyStateChange();
 			} else {
-				VConsole.log("FullScreen: toogle on");
+				//VConsole.log("FullScreen: toogle on");
 				requestFullScreen(target);
 				notifyStateChange();
 			}
@@ -76,7 +88,7 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
     };
     
     protected void notifyStateChange() {
-    	if (isInFullScreenMode(fullscreenTarget)) {
+    	if (isInFullScreenMode(getTargetElement())) {
     		if (!isInFullScreen) {
     			isInFullScreen = true;
     			serverRpc.enteredFullscreen();
@@ -84,7 +96,7 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
     	} else {
     		if (isInFullScreen) {
     			isInFullScreen = false;
-    			serverRpc.enteredFullscreen();
+    			serverRpc.leftFullscreen();
     		}
     	}
     }
@@ -96,6 +108,22 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
 			return fullscreenTarget;
 		}
 	}
+	
+	/**
+	 * Handler for fullscreen events.
+	 */
+	protected void onFullScreenChange() {
+		//VConsole.log("onFullScreenChange");
+		notifyStateChange();
+	}
+	
+	protected native final void attachFullScreenChangeListener (String eventName)
+	/*-{
+	    var that = this;
+		$doc.addEventListener(eventName, function() {
+			that.@org.vaadin.alump.gofullscreen.gwt.client.connect.GoFullScreenButtonConnector::onFullScreenChange()();
+		}, false); 
+	}-*/;
 	
 	protected native final static boolean isInFullScreenMode()
 	/*-{

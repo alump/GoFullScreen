@@ -1,5 +1,8 @@
 package org.vaadin.alump.gofullscreen;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.vaadin.alump.gofullscreen.gwt.client.connect.GoFullScreenServerRpc;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.GoFullScreenState;
 
@@ -16,7 +19,22 @@ import com.vaadin.ui.UI;
 @SuppressWarnings("serial")
 public class FullScreenButton extends Button {
 	
-	private Boolean lastFullScreenRequest = null;
+	private boolean targetIsFullscreen = false;
+	private List<FullScreenChangeListener> fsListeners =
+			new LinkedList<FullScreenChangeListener>();
+	
+	/**
+	 * Interface for fullscreen state change listeners of target component.
+	 */
+	public interface FullScreenChangeListener {
+		/**
+		 * Called when target component's fullscreen state changes.
+		 * @param component Target component with changed fullscreen state.
+		 * @param fullscreen Is component fullscreen.
+		 */
+		void onFullScreenChangeListener (AbstractComponent component,
+				boolean fullscreen);
+	}
 	
 	/**
 	 * Create new full screen button.
@@ -47,14 +65,24 @@ public class FullScreenButton extends Button {
 	private final GoFullScreenServerRpc serverRpc = new GoFullScreenServerRpc() {
 		@Override
 		public void enteredFullscreen() {
-			lastFullScreenRequest = true;
+			setFullScreenState (true);
 		}
 
 		@Override
 		public void leftFullscreen() {
-			lastFullScreenRequest = false;
+			setFullScreenState (false);
 		}
 	};
+	
+	protected void setFullScreenState (boolean fullscreen) {
+		if (targetIsFullscreen != fullscreen) {
+			targetIsFullscreen = fullscreen;
+			for (FullScreenChangeListener listener : fsListeners) {
+				listener.onFullScreenChangeListener(getFullScreenTarget(),
+						targetIsFullscreen);
+			}
+		}
+	}
 	
 	@Override
 	public GoFullScreenState getState() {
@@ -83,12 +111,25 @@ public class FullScreenButton extends Button {
 	}
 	
 	/**
-	 * Get last request done by button. This can be out-of-sync if user has
-	 * entered to or escaped from fullscreen mode with another method.
-	 * @return null if nothing requested, true if full screen requested, false
-	 * if full screen cancelled.
+	 * Is target component currently full screen.
 	 */
-	public Boolean getLastRequest() {
-		return lastFullScreenRequest;
+	public boolean isFullScreen() {
+		return targetIsFullscreen;
+	}
+	
+	/**
+	 * Add listener for fullscreen change of target element.
+	 * @param listener
+	 */
+	public void addFullScreenChangeListener(FullScreenChangeListener listener) {
+		fsListeners.add(listener);
+	}
+	
+	/**
+	 * Remove fullscreen change listener.
+	 * @param listener
+	 */
+	public void removeFullScreenChangeListener(FullScreenChangeListener listener) {
+		fsListeners.remove(listener);
 	}
 }
