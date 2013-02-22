@@ -9,21 +9,20 @@
 	<description>GoFullScreen Demo Application</description>
 	<version>${gofullscreen.version}</version>
 
-	<properties>
-		<gofullscreen.version>0.1.1</gofullscreen.version>
-		<Implementation-Version>${project.version}</Implementation-Version>
-	
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+    <properties>
+        <gofullscreen.version>0.1.2-SNAPSHOT</gofullscreen.version>
+        <Implementation-Version>${project.version}</Implementation-Version>
+		
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
 		<!-- May be overridden by the build system -->
 		<license.short.name>apache2</license.short.name>
-        <vaadin.version>7.0.1</vaadin.version>
-        <vaadin.plugin.version>7.0.1</vaadin.plugin.version>
-
+		<vaadin.version>7.0.1</vaadin.version>
+		<vaadin.plugin.version>7.0.1</vaadin.plugin.version>
+		
 		<!-- Must not change this because of the Directory -->
 		<Implementation-Title>GoFullScreen</Implementation-Title>
 		<Implementation-Vendor>Sami Viitanen</Implementation-Vendor>
-
 	</properties>
 
 	<repositories>

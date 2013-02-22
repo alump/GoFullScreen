@@ -5,9 +5,9 @@
 	<artifactId>gofullscreen-addon</artifactId>
 	<packaging>jar</packaging>
 	<name>GoFullscreen addon</name>
-	<version>${picker.version}</version>
+	<version>${gofullscreen.version}</version>
 
-	<description>GoFullscreen Vaadin 7 addon</description>
+    <description>GoFullScreen Vaadin 7 addon</description>
 
 	<organization>
 		<name>Sami Viitanen</name>
@@ -27,7 +27,7 @@
 	</developers>
 
 	<properties>
-	    <picker.version>0.1.1</picker.version>
+	    <gofullscreen.version>0.1.2-SNAPSHOT</gofullscreen.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- May be overridden by the build system -->
