@@ -74,3 +74,13 @@
     background-color: black;
     line-height: 40px;
 }
+
+.demo-video {
+    width: 320px !important;
+    height: 180px !important;
+}
+
+.demo-video:-webkit-full-screen {
+    width: 100% !important;
+    height: 100% !important;
+}
