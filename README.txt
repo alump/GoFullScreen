@@ -6,7 +6,7 @@ components inside it (like images or videos).
 
 Demo application: http://siika.fi:8080/GoFullScreenDemo/
 Source code: https://github.com/alump/GoFullScreen
-Vaadin Directory: https://vaadin.com/directory#addon/?
+Vaadin Directory: https://vaadin.com/directory#addon/gofullscreen
 License: Apache License 2.0
 
 This project can be imported to Eclipse with m2e.

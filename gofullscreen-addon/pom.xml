@@ -27,7 +27,7 @@
 	</developers>
 
 	<properties>
-	    <picker.version>0.1.0</picker.version>
+	    <picker.version>0.1.1-SNAPSHOT</picker.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- May be overridden by the build system -->

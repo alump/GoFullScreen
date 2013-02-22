@@ -10,7 +10,7 @@
 	<version>${gofullscreen.version}</version>
 
 	<properties>
-		<gofullscreen.version>0.1.0</gofullscreen.version>
+		<gofullscreen.version>0.1.1-SNAPSHOT</gofullscreen.version>
 		<Implementation-Version>${project.version}</Implementation-Version>
 	
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
