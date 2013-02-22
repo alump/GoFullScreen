@@ -27,7 +27,7 @@
 	</developers>
 
 	<properties>
-	    <picker.version>0.0.1-SNAPSHOT</picker.version>
+	    <picker.version>0.1.0</picker.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- May be overridden by the build system -->
@@ -37,9 +37,9 @@
 
 		<Implementation-Version>${project.version}</Implementation-Version>
 		<!-- Must not change this because of the Directory -->
-		<Implementation-Title>GoFullscreen</Implementation-Title>
+		<Implementation-Title>GoFullScreen</Implementation-Title>
 		<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-		<Vaadin-Addon>GoFullscreen-${project.version}.jar</Vaadin-Addon>
+		<Vaadin-Addon>GoFullScreen-${project.version}.jar</Vaadin-Addon>
 
 	</properties>
 
@@ -134,7 +134,7 @@
 						</manifest>
 						<manifestEntries>
 							<!-- Keep old name of addon -->
-							<Implementation-Title>GoFullscreen</Implementation-Title>
+							<Implementation-Title>GoFullScreen</Implementation-Title>
 
 							<!-- Package format version - do not change -->
 							<Vaadin-Package-Version>1</Vaadin-Package-Version>
@@ -189,7 +189,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<finalName>GoFullscreen-${project.version}</finalName>
+		<finalName>GoFullScreen-${project.version}</finalName>
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -236,7 +236,7 @@
 								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							</manifest>
 							<manifestEntries>
-								<Implementation-Title>GoFullscreen documentation</Implementation-Title>
+								<Implementation-Title>GoFullScreen documentation</Implementation-Title>
 							</manifestEntries>
 						</archive>
 						<sourceEncoding>UTF-8</sourceEncoding>
@@ -244,7 +244,7 @@
 							<link>http://docs.oracle.com/javase/6/docs/api/</link>
 							<link>https://vaadin.com/api/</link>
 						</links>
-						<doctitle>GoFullscreen Vaadin Addon</doctitle>
+						<doctitle>GoFullScreen Vaadin Addon</doctitle>
 						<sourcepath>src/main/java</sourcepath>
 						<show>public</show>
 						<source>1.6</source>

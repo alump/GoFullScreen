@@ -3,23 +3,30 @@ package org.vaadin.alump.gofullscreen.demo;
 import org.vaadin.alump.gofullscreen.FullScreenButton;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("serial")
 @Theme("demo")
+@Title("GoFullScreen Demo")
 public class GoFullScreenDemoUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
+		
 		VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 		layout.setWidth("100%");
 		setContent(layout);
+		
+		Label notice = new Label("Notice: Full screen buttons are hidden for nonsupported browsers (IE, Safari...)");
+		layout.addComponent(notice);
 		
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		buttonLayout.setCaption("Full screen actions:");
@@ -31,11 +38,19 @@ public class GoFullScreenDemoUI extends UI {
 		FullScreenButton button2 = new FullScreenButton("Picture");
 		buttonLayout.addComponent(button2);
 		
+		FullScreenButton button3 = new FullScreenButton("Label");
+		buttonLayout.addComponent(button3);
+		
 		Image image = new Image();
 		image.addStyleName("demo-image");
-		image.setSource(new ExternalResource("http://farm9.staticflickr.com/8106/8476237039_277fd10caf_z.jpg"));
+		image.setSource(new ExternalResource("http://farm9.staticflickr.com/8106/8476237039_277fd10caf_b.jpg"));
 		layout.addComponent(image);
 		button2.setFullScreenTarget(image);
+		
+		Label label = new Label("Hello World!");
+		label.addStyleName("demo-label");
+		layout.addComponent(label);
+		button3.setFullScreenTarget(label);
 		
 	}
 

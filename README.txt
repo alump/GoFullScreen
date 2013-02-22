@@ -16,7 +16,7 @@ Simple Maven tutorials:
 
 ***** How to compile add on jar package for your project *****
 
-> cd picker-addon
+> cd gofullscreen-addon
 > mvn package
 
 add on can be found at: picker-addon/target/GoFullScreen-<version>.jar
