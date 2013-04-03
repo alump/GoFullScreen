@@ -8,12 +8,19 @@ import com.vaadin.annotations.Title;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Video;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.CloseEvent;
+import com.vaadin.ui.Window.CloseListener;
 
 @SuppressWarnings("serial")
 @Theme("demo")
@@ -21,6 +28,10 @@ import com.vaadin.ui.Video;
 public class GoFullScreenDemoUI extends UI {
 
     protected Label notice;
+    protected Button openWindowButton;
+    protected HorizontalLayout buttonLayout;
+    protected FullScreenButton windowFullScreenButton;
+    protected Window extraWindow;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -34,7 +45,7 @@ public class GoFullScreenDemoUI extends UI {
                 "Notice: Full screen buttons are hidden for nonsupported browsers (IE, Safari...)");
         layout.addComponent(notice);
 
-        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout = new HorizontalLayout();
         buttonLayout.setCaption("Full screen actions:");
         layout.addComponent(buttonLayout);
 
@@ -45,11 +56,11 @@ public class GoFullScreenDemoUI extends UI {
             public void onFullScreenChangeListener(AbstractComponent component,
                     boolean fullscreen) {
                 if (fullscreen) {
-                    System.out.println("All is now fullscreen");
-                    button.setCaption("All (off)");
+                    System.out.println("View is now fullscreen");
+                    button.setCaption("View (off)");
                 } else {
-                    System.out.println("All isn't anymore fullscreen");
-                    button.setCaption("All (on)");
+                    System.out.println("View isn't anymore fullscreen");
+                    button.setCaption("View (on)");
                 }
             }
 
@@ -89,7 +100,7 @@ public class GoFullScreenDemoUI extends UI {
         buttonLayout.addComponent(button3);
 
         FullScreenButton button4 = new FullScreenButton("Video");
-        button3.addFullScreenChangeListener(new FullScreenChangeListener() {
+        button4.addFullScreenChangeListener(new FullScreenChangeListener() {
 
             @Override
             public void onFullScreenChangeListener(AbstractComponent component,
@@ -103,6 +114,38 @@ public class GoFullScreenDemoUI extends UI {
 
         });
         buttonLayout.addComponent(button4);
+        
+        openWindowButton = new Button("Window (Open)");
+        openWindowButton.addClickListener(new ClickListener() {
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				createExtraWindow();
+				windowFullScreenButton.setFullScreenTarget(
+						(AbstractComponent)extraWindow.getContent());
+				windowFullScreenButton.setVisible(true);
+				openWindowButton.setVisible(false);
+			}
+        	
+        });
+        buttonLayout.addComponent(openWindowButton);
+        
+        windowFullScreenButton = new FullScreenButton("Window (FS)");
+        windowFullScreenButton.addFullScreenChangeListener(new FullScreenChangeListener() {
+
+            @Override
+            public void onFullScreenChangeListener(AbstractComponent component,
+                    boolean fullscreen) {
+                if (fullscreen) {
+                    System.out.println("Window is now fullscreen");
+                } else {
+                    System.out.println("Window isn't anymore fullscreen");
+                }
+            }
+
+        });
+        buttonLayout.addComponent(windowFullScreenButton);
+        windowFullScreenButton.setVisible(false);
 
         Image image = new Image();
         image.addStyleName("demo-image");
@@ -127,6 +170,37 @@ public class GoFullScreenDemoUI extends UI {
         layout.addComponent(video);
         button4.setFullScreenTarget(video);
 
+    }
+    
+    private void createExtraWindow() {
+    	if (extraWindow != null) {
+    		return;
+    	}
+    	
+    	extraWindow = new Window();
+        extraWindow.setWidth("100px");
+        extraWindow.setHeight("100px");
+        extraWindow.setCaption("Extra window");
+        extraWindow.setClosable(true);
+        
+        CssLayout layout = new CssLayout();
+        extraWindow.setContent(layout);
+        
+        Label label = new Label("Hello world inside a window!");
+        layout.addComponent(label);
+        
+        getCurrent().addWindow(extraWindow);
+        
+        extraWindow.addCloseListener(new CloseListener() {
+
+			@Override
+			public void windowClose(CloseEvent e) {
+				extraWindow = null;
+				windowFullScreenButton.setVisible(false);
+				openWindowButton.setVisible(true);
+			}
+        	
+        });
     }
 
 }
