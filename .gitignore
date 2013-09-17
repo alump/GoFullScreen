@@ -1,0 +1,11 @@
+gofullscreen-addon/.classpath
+gofullscreen-addon/.gitignore
+gofullscreen-addon/.project
+gofullscreen-addon/.settings/
+gofullscreen-demo/.classpath
+gofullscreen-demo/.gitignore
+gofullscreen-demo/.project
+gofullscreen-demo/.settings/
+gofullscreen-demo/src/main/webapp/VAADIN/gwt-unitCache/
+gofullscreen-demo/src/main/webapp/VAADIN/widgetsets/
+
