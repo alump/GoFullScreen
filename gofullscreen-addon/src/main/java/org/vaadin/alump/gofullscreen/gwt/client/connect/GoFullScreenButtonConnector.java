@@ -14,6 +14,9 @@ import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.client.ui.button.ButtonConnector;
 import com.vaadin.shared.ui.Connect;
 
+/**
+ * Connector for FullScreen Button
+ */
 @SuppressWarnings("serial")
 @Connect(org.vaadin.alump.gofullscreen.FullScreenButton.class)
 public class GoFullScreenButtonConnector extends ButtonConnector {
@@ -54,12 +57,16 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
 		}
 
 		if (!isBrowserSupported()) {
-			getWidget().setVisible(false);
+            if(getState().hideIfNotSupported) {
+			    getWidget().setVisible(false);
+            }
 		} else if (!changeListenerAttached) {
-			if (BrowserInfo.get().isChrome()) {
+			if (isSupportedWebKit()) {
 				attachFullScreenChangeListener("webkitfullscreenchange");
 			} else if (BrowserInfo.get().isGecko()) {
 				attachFullScreenChangeListener("mozfullscreenchange");
+            } else if (isIE11()) {
+                attachFullScreenChangeListener("MSFullscreenChange");
 			} else {
 				attachFullScreenChangeListener("fullscreenchange");
 			}
@@ -67,9 +74,39 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
 		}
 	}
 
+    /**
+     * Check if browser is one of supported WebKit browsers.
+     * @return
+     */
+    private static boolean isSupportedWebKit() {
+        BrowserInfo info = BrowserInfo.get();
+
+        if(!info.isWebkit()) {
+            return false;
+        } else if(info.isChrome()) {
+            return true;
+        } else if(info.isSafari() && !info.isIOS()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Check if browser is IE11
+     * @return
+     */
+    private static boolean isIE11() {
+        if(BrowserInfo.get().isIE()) {
+            return BrowserInfo.getBrowserString().toLowerCase().contains("rv:11");
+        } else {
+            return false;
+        }
+    }
+
 	protected boolean isBrowserSupported() {
-		return BrowserInfo.get().isChrome() || BrowserInfo.get().isGecko()
-				|| BrowserInfo.get().isOpera();
+		return isSupportedWebKit() || BrowserInfo.get().isGecko()
+				|| BrowserInfo.get().isOpera() || isIE11();
 	}
 
 	private final ClickHandler clickToFullScreenHandler = new ClickHandler() {
@@ -130,13 +167,13 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
 
 	protected native final static boolean isInFullScreenMode()
 	/*-{
-		return !(!$doc.fullscreenElement && !$doc.mozFullScreenElement && !$doc.webkitFullscreenElement);
+		return !(!$doc.fullscreenElement && !$doc.mozFullScreenElement && !$doc.webkitFullscreenElement && !$doc.msFullscreenElement);
 	}-*/;
 
 	protected native final static boolean isInFullScreenMode(
 			JavaScriptObject element)
 	/*-{
-		return !(element != $doc.fullscreenElement &&  element != $doc.mozFullScreenElement &&  element != $doc.webkitFullscreenElement);
+		return !(element != $doc.fullscreenElement &&  element != $doc.mozFullScreenElement &&  element != $doc.webkitFullscreenElement && element != $doc.msFullscreenElement);
 	}-*/;
 
 	protected native final static boolean requestFullScreen(
@@ -148,6 +185,8 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
 	        element.webkitRequestFullScreen();
 	    } else if(element.mozRequestFullScreen) {
 	        element.mozRequestFullScreen();
+	    } else if(element.msRequestFullscreen) {
+	        element.msRequestFullscreen();
 	    } else {
 	        console.log('entering fullscreen not supported!');
 	    }
@@ -161,6 +200,8 @@ public class GoFullScreenButtonConnector extends ButtonConnector {
 	        $doc.webkitCancelFullScreen();
 	    } else if($doc.mozCancelFullScreen) {
 	        $doc.mozCancelFullScreen();
+	    } else if($doc.msExitFullscreen) {
+            $doc.msExitFullscreen();
 	    } else {
 	        console.log('leaving fullscreen not supported!');
 	    }

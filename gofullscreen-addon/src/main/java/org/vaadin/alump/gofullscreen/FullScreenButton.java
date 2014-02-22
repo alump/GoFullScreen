@@ -143,4 +143,20 @@ public class FullScreenButton extends Button {
 	public void removeFullScreenChangeListener(FullScreenChangeListener listener) {
 		fsListeners.remove(listener);
 	}
+
+    /**
+     * Hide button automatically on browsers that do not support FullScreen API
+     * @param hidden true to auto hide
+     */
+    public void setHiddenWhenNotSupported(boolean hidden) {
+        getState().hideIfNotSupported = hidden;
+    }
+
+    /**
+     * Check if button is automatically hidden on browsers not supporting FullScreen API
+     * @return true if auto hidden
+     */
+    public boolean isHiddenWhenNotSupported() {
+        return getState().hideIfNotSupported;
+    }
 }

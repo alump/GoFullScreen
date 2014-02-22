@@ -8,4 +8,9 @@ gofullscreen-demo/.project
 gofullscreen-demo/.settings/
 gofullscreen-demo/src/main/webapp/VAADIN/gwt-unitCache/
 gofullscreen-demo/src/main/webapp/VAADIN/widgetsets/
-
+.DS_Store
+.idea/
+gofullscreen-addon/gofullscreen-addon.iml
+gofullscreen-addon/target/
+gofullscreen-demo/gofullscreen-demo.iml
+gofullscreen-demo/target/
