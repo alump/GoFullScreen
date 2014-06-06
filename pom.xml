@@ -3,10 +3,10 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vaadin.alump</groupId>
-	<artifactId>distributionbar</artifactId>
+	<artifactId>gofullscreen</artifactId>
 	<version>0.3.0</version>
 	<packaging>pom</packaging>
-	<name>Distribution Bar Maven project</name>
+	<name>GoFullScreen Maven project</name>
 
 	<modules>
 		<module>gofullscreen-addon</module>
