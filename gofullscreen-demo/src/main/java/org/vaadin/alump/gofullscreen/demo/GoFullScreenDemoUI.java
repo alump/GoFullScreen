@@ -1,5 +1,7 @@
 package org.vaadin.alump.gofullscreen.demo;
 
+import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.server.VaadinServlet;
 import org.vaadin.alump.gofullscreen.FullScreenButton;
 import org.vaadin.alump.gofullscreen.FullScreenButton.FullScreenChangeListener;
 
@@ -22,6 +24,8 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
+import javax.servlet.annotation.WebServlet;
+
 @SuppressWarnings("serial")
 @Theme("demo")
 @Title("GoFullScreen Demo")
@@ -32,6 +36,11 @@ public class GoFullScreenDemoUI extends UI {
 	protected HorizontalLayout buttonLayout;
 	protected FullScreenButton windowFullScreenButton;
 	protected Window extraWindow;
+
+    @WebServlet(value = "/*")
+    @VaadinServletConfiguration(productionMode = false, ui = GoFullScreenDemoUI.class, widgetset = "org.vaadin.alump.gofullscreen.demo.gwt.GoFullScreenDemoWidgetSet")
+    public static class FancyLayoutsUIServlet extends VaadinServlet {
+    }
 
 	@Override
 	protected void init(VaadinRequest request) {
