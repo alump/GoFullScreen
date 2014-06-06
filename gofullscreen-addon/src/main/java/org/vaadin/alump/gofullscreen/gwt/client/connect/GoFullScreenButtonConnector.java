@@ -1,5 +1,6 @@
 package org.vaadin.alump.gofullscreen.gwt.client.connect;
 
+import com.google.gwt.dom.client.Document;
 import org.vaadin.alump.gofullscreen.gwt.client.GoFullScreenButton;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.GoFullScreenState;
 
@@ -14,6 +15,10 @@ import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.client.ui.button.ButtonConnector;
 import com.vaadin.shared.ui.Connect;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Logger;
+
 /**
  * Connector for FullScreen Button
  */
@@ -21,190 +26,215 @@ import com.vaadin.shared.ui.Connect;
 @Connect(org.vaadin.alump.gofullscreen.FullScreenButton.class)
 public class GoFullScreenButtonConnector extends ButtonConnector {
 
-	private JavaScriptObject fullscreenTarget;
-	private boolean isInFullScreen = false;
-	private boolean changeListenerAttached = false;
+    private JavaScriptObject fullscreenTarget;
+    private boolean isInFullScreen = false;
+    private boolean supported = false;
 
-	private final GoFullScreenServerRpc serverRpc = RpcProxy.create(
-			GoFullScreenServerRpc.class, this);
+    // Use static message passing, to keep native event handling simple and to avoid js memory leaks
+    private static Set<GoFullScreenButtonConnector> currentInstances = null;
 
-	public GoFullScreenButtonConnector() {
-		getWidget().addClickHandler(clickToFullScreenHandler);
-	}
+    protected static void addInstance(GoFullScreenButtonConnector instance) {
+        initializeSharedResources();
+        currentInstances.add(instance);
+    }
 
-	@Override
-	public GoFullScreenButton getWidget() {
-		return (GoFullScreenButton) super.getWidget();
-	}
+    protected static void removeInstance(GoFullScreenButtonConnector instance) {
+        currentInstances.remove(instance);
+    }
 
-	@Override
-	public GoFullScreenState getState() {
-		return (GoFullScreenState) super.getState();
-	}
+    protected static void notifyInstances() {
+        for (GoFullScreenButtonConnector instance : currentInstances) {
+            instance.onFullScreenChange();
+        }
+    }
 
-	@Override
-	public void onStateChanged(StateChangeEvent stateChangeEvent) {
-		super.onStateChanged(stateChangeEvent);
+    public static void initializeSharedResources() {
+        if (currentInstances == null) {
+            currentInstances = new HashSet<GoFullScreenButtonConnector>();
+            attachFullScreenChangeListener(getChangeEventName());
+        }
+    }
 
-		if (fullscreenTarget != getState().fullscreenTarget) {
-			if (getState().fullscreenTarget == null) {
-				fullscreenTarget = null;
-			} else {
-				fullscreenTarget = ((AbstractComponentConnector) (getState().fullscreenTarget))
-						.getWidget().getElement();
-			}
-			notifyStateChange();
-		}
+    protected native final static void attachFullScreenChangeListener(String eventName)
+    /*-{
+        $doc.addEventListener(eventName,
+            function () {
+                @org.vaadin.alump.gofullscreen.gwt.client.connect.GoFullScreenButtonConnector::notifyInstances()();
+            }, false);
+    }-*/;
 
-		if (!isBrowserSupported()) {
-            if(getState().hideIfNotSupported) {
-			    getWidget().setVisible(false);
+    private static String getChangeEventName() {
+        if (BrowserInfo.get().isWebkit()) {
+            return "webkitfullscreenchange";
+        } else if (BrowserInfo.get().isGecko()) {
+            return "mozfullscreenchange";
+        } else if (BrowserInfo.get().isIE()) {
+            return "MSFullscreenChange";
+        } else {
+            return "fullscreenchange";
+        }
+    }
+
+
+    public GoFullScreenButtonConnector() {
+        getWidget().addClickHandler(clickToFullScreenHandler);
+    }
+
+    @Override
+    public GoFullScreenButton getWidget() {
+        return (GoFullScreenButton) super.getWidget();
+    }
+
+    @Override
+    public GoFullScreenState getState() {
+        return (GoFullScreenState) super.getState();
+    }
+
+    @Override
+    public void init() {
+        super.init();
+
+        supported = isFullscreenSupported(Document.get().getBody());
+        if (supported) {
+            addInstance(this);
+        }
+    }
+
+    @Override
+    public void onStateChanged(StateChangeEvent stateChangeEvent) {
+        super.onStateChanged(stateChangeEvent);
+
+        if (fullscreenTarget != getState().fullscreenTarget) {
+            if (getState().fullscreenTarget == null) {
+                fullscreenTarget = null;
+            } else {
+                fullscreenTarget = ((AbstractComponentConnector) (getState().fullscreenTarget))
+                        .getWidget().getElement();
             }
-		} else if (!changeListenerAttached) {
-			if (isSupportedWebKit()) {
-				attachFullScreenChangeListener("webkitfullscreenchange");
-			} else if (BrowserInfo.get().isGecko()) {
-				attachFullScreenChangeListener("mozfullscreenchange");
-            } else if (isIE11()) {
-                attachFullScreenChangeListener("MSFullscreenChange");
-			} else {
-				attachFullScreenChangeListener("fullscreenchange");
-			}
-			changeListenerAttached = true;
-		}
-	}
+            notifyStateChange();
+        }
 
-    /**
-     * Check if browser is one of supported WebKit browsers.
-     * @return
-     */
-    private static boolean isSupportedWebKit() {
-        BrowserInfo info = BrowserInfo.get();
+        if (!isFullscreenSupported(Document.get().getBody())) {
+            if (getState().hideIfNotSupported) {
+                getWidget().setVisible(false);
+            }
+        }
+    }
 
-        if(!info.isWebkit()) {
-            return false;
-        } else if(info.isChrome()) {
-            return true;
-        } else if(info.isSafari() && !info.isIOS()) {
-            return true;
+    private final ClickHandler clickToFullScreenHandler = new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            if (!GoFullScreenButtonConnector.this.isEnabled()) {
+                getLogger().fine("Ignoring click when not enabled.");
+                return;
+            }
+            JavaScriptObject target = getTargetElement();
+            if (isInFullScreenMode(target)) {
+                // VConsole.log("FullScreen: toogle off");
+                cancelFullScreen();
+                notifyStateChange();
+            } else {
+                // VConsole.log("FullScreen: toogle on");
+                requestFullScreen(target);
+                notifyStateChange();
+            }
+        }
+
+    };
+
+    protected void notifyStateChange() {
+        if (isInFullScreenMode(getTargetElement())) {
+            if (!isInFullScreen) {
+                isInFullScreen = true;
+                getRpcProxy(GoFullScreenServerRpc.class).enteredFullscreen();
+            }
         } else {
-            return false;
+            if (isInFullScreen) {
+                isInFullScreen = false;
+                getRpcProxy(GoFullScreenServerRpc.class).leftFullscreen();
+            }
+        }
+    }
+
+    protected JavaScriptObject getTargetElement() {
+        if (fullscreenTarget == null) {
+            return RootPanel.getBodyElement();
+        } else {
+            return fullscreenTarget;
         }
     }
 
     /**
-     * Check if browser is IE11
-     * @return
+     * Handler for fullscreen events.
      */
-    private static boolean isIE11() {
-        if(BrowserInfo.get().isIE()) {
-            return BrowserInfo.getBrowserString().toLowerCase().contains("rv:11");
+    protected void onFullScreenChange() {
+        notifyStateChange();
+    }
+
+    protected native final static boolean isInFullScreenMode()
+	/*-{
+        return !(!$doc.fullscreenElement && !$doc.mozFullScreenElement && !$doc.webkitFullscreenElement && !$doc.msFullscreenElement);
+    }-*/;
+
+    protected native final static boolean isInFullScreenMode(
+            JavaScriptObject element)
+	/*-{
+        return !(element != $doc.fullscreenElement && element != $doc.mozFullScreenElement && element != $doc.webkitFullscreenElement && element != $doc.msFullscreenElement);
+    }-*/;
+
+    protected native final static boolean requestFullScreen(JavaScriptObject element)
+	/*-{
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+        } else {
+            console.error('entering fullscreen not supported!');
+        }
+    }-*/;
+
+    protected native static boolean isFullscreenSupported(JavaScriptObject element)
+    /*-{
+        if (element.requestFullscreen) {
+            return true;
+        } else if (element.webkitRequestFullScreen) {
+            return true;
+        } else if (element.mozRequestFullScreen) {
+            return true;
+        } else if (element.msRequestFullscreen) {
+            return true;
         } else {
             return false;
         }
-    }
+    }-*/;
 
-	protected boolean isBrowserSupported() {
-		return isSupportedWebKit() || BrowserInfo.get().isGecko()
-				|| BrowserInfo.get().isOpera() || isIE11();
-	}
-
-	private final ClickHandler clickToFullScreenHandler = new ClickHandler() {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			JavaScriptObject target = getTargetElement();
-			if (isInFullScreenMode(target)) {
-				// VConsole.log("FullScreen: toogle off");
-				cancelFullScreen();
-				notifyStateChange();
-			} else {
-				// VConsole.log("FullScreen: toogle on");
-				requestFullScreen(target);
-				notifyStateChange();
-			}
-		}
-
-	};
-
-	protected void notifyStateChange() {
-		if (isInFullScreenMode(getTargetElement())) {
-			if (!isInFullScreen) {
-				isInFullScreen = true;
-				serverRpc.enteredFullscreen();
-			}
-		} else {
-			if (isInFullScreen) {
-				isInFullScreen = false;
-				serverRpc.leftFullscreen();
-			}
-		}
-	}
-
-	protected JavaScriptObject getTargetElement() {
-		if (fullscreenTarget == null) {
-			return RootPanel.getBodyElement();
-		} else {
-			return fullscreenTarget;
-		}
-	}
-
-	/**
-	 * Handler for fullscreen events.
-	 */
-	protected void onFullScreenChange() {
-		// VConsole.log("onFullScreenChange");
-		notifyStateChange();
-	}
-
-	protected native final void attachFullScreenChangeListener(String eventName)
+    protected native final static void cancelFullScreen()
 	/*-{
-	    var that = this;
-		$doc.addEventListener(eventName, function() {
-			that.@org.vaadin.alump.gofullscreen.gwt.client.connect.GoFullScreenButtonConnector::onFullScreenChange()();
-		}, false); 
-	}-*/;
-
-	protected native final static boolean isInFullScreenMode()
-	/*-{
-		return !(!$doc.fullscreenElement && !$doc.mozFullScreenElement && !$doc.webkitFullscreenElement && !$doc.msFullscreenElement);
-	}-*/;
-
-	protected native final static boolean isInFullScreenMode(
-			JavaScriptObject element)
-	/*-{
-		return !(element != $doc.fullscreenElement &&  element != $doc.mozFullScreenElement &&  element != $doc.webkitFullscreenElement && element != $doc.msFullscreenElement);
-	}-*/;
-
-	protected native final static boolean requestFullScreen(
-			JavaScriptObject element)
-	/*-{
-	    if(element.requestFullscreen) {
-	        element.requestFullscreen();
-	    } else if(element.webkitRequestFullScreen) {
-	        element.webkitRequestFullScreen();
-	    } else if(element.mozRequestFullScreen) {
-	        element.mozRequestFullScreen();
-	    } else if(element.msRequestFullscreen) {
-	        element.msRequestFullscreen();
-	    } else {
-	        console.log('entering fullscreen not supported!');
-	    }
-	}-*/;
-
-	protected native final static void cancelFullScreen()
-	/*-{
-		if($doc.cancelFullScreen) {
-	        $doc.cancelFullScreen();
-	    } else if($doc.webkitCancelFullScreen) {
-	        $doc.webkitCancelFullScreen();
-	    } else if($doc.mozCancelFullScreen) {
-	        $doc.mozCancelFullScreen();
-	    } else if($doc.msExitFullscreen) {
+        if ($doc.cancelFullScreen) {
+            $doc.cancelFullScreen();
+        } else if ($doc.webkitCancelFullScreen) {
+            $doc.webkitCancelFullScreen();
+        } else if ($doc.mozCancelFullScreen) {
+            $doc.mozCancelFullScreen();
+        } else if ($doc.msExitFullscreen) {
             $doc.msExitFullscreen();
-	    } else {
-	        console.log('leaving fullscreen not supported!');
-	    }
-	}-*/;
+        } else {
+            console.error('leaving fullscreen not supported!');
+        }
+    }-*/;
+
+    private static Logger getLogger() {
+        return Logger.getLogger(GoFullScreenButtonConnector.class.getName());
+    }
+
+    public void onUnregister() {
+        removeInstance(this);
+        super.onUnregister();
+    }
 
 }

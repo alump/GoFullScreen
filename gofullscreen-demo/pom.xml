@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vaadin.alump.gofullscreen</groupId>
 	<artifactId>gofullscreen-demo</artifactId>
 	<packaging>war</packaging>
 	<name>GoFullScreen demo</name>
 	<description>GoFullScreen Demo Application</description>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>0.3.0</version>
 
-    <properties>
-        <Implementation-Version>${project.version}</Implementation-Version>
-		
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
+	<properties>
+		<Implementation-Version>${project.version}</Implementation-Version>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<!-- May be overridden by the build system -->
 		<license.short.name>apache2</license.short.name>
-		<vaadin.version>7.1.15</vaadin.version>
-		<vaadin.plugin.version>7.1.15</vaadin.plugin.version>
-		
+		<vaadin.version>7.2.2</vaadin.version>
+		<vaadin.plugin.version>7.2.2</vaadin.plugin.version>
+
 		<!-- Must not change this because of the Directory -->
 		<Implementation-Title>GoFullScreen</Implementation-Title>
 		<Implementation-Vendor>Sami Viitanen</Implementation-Vendor>
+
+		<project.widgetset>org.vaadin.alump.gofullscreen.demo.gwt.GoFullScreenDemoWidgetSet</project.widgetset>
 	</properties>
 
 	<repositories>
@@ -70,12 +72,12 @@
 			<artifactId>vaadin-themes</artifactId>
 			<version>${vaadin.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client</artifactId>
-            <version>${vaadin.version}</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client</artifactId>
+			<version>${vaadin.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiler</artifactId>
@@ -112,7 +114,7 @@
 					<hostedWebapp>src/main/webapp/VAADIN/widgetsets</hostedWebapp>
 
 					<modules>
-						<module>org.vaadin.alump.gofullscreen.demo.gwt.GoFullScreenDemoWidgetSet</module>
+						<module>${project.widgetset}</module>
 					</modules>
 
 					<force>true</force>
@@ -127,16 +129,16 @@
 					<strict>true</strict>
 					<compileReport>false</compileReport>
 				</configuration>
-				
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>resources</goal>
-                            <goal>compile</goal>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>resources</goal>
+							<goal>compile</goal>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -153,7 +155,8 @@
 						</resource>
 					</webResources>
 					<warSourceExcludes>VAADIN/gwt-unitCache/**,
-						VAADIN/widgetsets/WEB-INF/**</warSourceExcludes>
+						VAADIN/widgetsets/WEB-INF/**
+					</warSourceExcludes>
 					<archive>
 						<addMavenDescriptor>false</addMavenDescriptor>
 						<manifest>
@@ -161,7 +164,7 @@
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
 						<manifestEntries>
-							<Vaadin-Widgetsets>org.vaadin.alump.gofullscreen.gwt.GoFullScreenWidgetset</Vaadin-Widgetsets>
+							<Vaadin-Widgetsets>${project.widgetset}</Vaadin-Widgetsets>
 						</manifestEntries>
 					</archive>
 					<warName>GoFullScreenDemo</warName>
@@ -246,7 +249,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
