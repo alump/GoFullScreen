@@ -4,7 +4,7 @@ import com.vaadin.shared.Connector;
 import com.vaadin.shared.ui.button.ButtonState;
 
 @SuppressWarnings("serial")
-public class GoFullScreenState extends ButtonState {
+public class FSButtonState extends ButtonState {
 	public Connector fullscreenTarget;
     public boolean hideIfNotSupported = true;
 }

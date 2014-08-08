@@ -1,44 +1,29 @@
 package org.vaadin.alump.gofullscreen;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.NativeButton;
 import org.vaadin.alump.gofullscreen.gwt.client.connect.FSButtonServerRpc;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonState;
 
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Button;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Button that can be used to toggle client side fullscreen mode on browser
+ * NativeButton that can be used to toggle client side fullscreen mode on browser
  * supporting requestFullScreen calls. Full screen state change requests has to
  * be done from user actions. For this reason there is no API for server side to
  * ask client side to move to full screen mode.
  */
 @SuppressWarnings("serial")
-public class FullScreenButton extends Button {
+public class FullScreenNativeButton extends NativeButton {
 
     private boolean targetIsFullscreen = false;
-    private final List<FullScreenChangeListener> fsListeners = new LinkedList<FullScreenChangeListener>();
-
-    /**
-     * Interface for fullscreen state change listeners of target component.
-     */
-    public interface FullScreenChangeListener {
-        /**
-         * Called when target component's fullscreen state changes.
-         *
-         * @param component  Target component with changed fullscreen state.
-         * @param fullscreen Is component fullscreen.
-         */
-        void onFullScreenChangeListener(AbstractComponent component,
-                                        boolean fullscreen);
-    }
+    private final List<FullScreenButton.FullScreenChangeListener> fsListeners = new LinkedList<FullScreenButton.FullScreenChangeListener>();
 
     /**
      * Create new full screen button.
      */
-    public FullScreenButton() {
+    public FullScreenNativeButton() {
         registerRpc(serverRpc);
     }
 
@@ -47,7 +32,7 @@ public class FullScreenButton extends Button {
      *
      * @param caption Caption of button.
      */
-    public FullScreenButton(String caption) {
+    public FullScreenNativeButton(String caption) {
         super(caption);
         registerRpc(serverRpc);
     }
@@ -58,7 +43,7 @@ public class FullScreenButton extends Button {
      * @param caption  Caption of button.
      * @param listener Click listener.
      */
-    public FullScreenButton(String caption, ClickListener listener) {
+    public FullScreenNativeButton(String caption, ClickListener listener) {
         super(caption, listener);
         registerRpc(serverRpc);
     }
@@ -78,7 +63,7 @@ public class FullScreenButton extends Button {
     protected void setFullScreenState(boolean fullscreen) {
         if (targetIsFullscreen != fullscreen) {
             targetIsFullscreen = fullscreen;
-            for (FullScreenChangeListener listener : fsListeners) {
+            for (FullScreenButton.FullScreenChangeListener listener : fsListeners) {
                 listener.onFullScreenChangeListener(getFullScreenTarget(),
                         targetIsFullscreen);
             }
@@ -125,7 +110,7 @@ public class FullScreenButton extends Button {
      *
      * @param listener
      */
-    public void addFullScreenChangeListener(FullScreenChangeListener listener) {
+    public void addFullScreenChangeListener(FullScreenButton.FullScreenChangeListener listener) {
         fsListeners.add(listener);
     }
 
@@ -134,7 +119,7 @@ public class FullScreenButton extends Button {
      *
      * @param listener
      */
-    public void removeFullScreenChangeListener(FullScreenChangeListener listener) {
+    public void removeFullScreenChangeListener(FullScreenButton.FullScreenChangeListener listener) {
         fsListeners.remove(listener);
     }
 
@@ -155,4 +140,5 @@ public class FullScreenButton extends Button {
     public boolean isHiddenWhenNotSupported() {
         return getState().hideIfNotSupported;
     }
+
 }

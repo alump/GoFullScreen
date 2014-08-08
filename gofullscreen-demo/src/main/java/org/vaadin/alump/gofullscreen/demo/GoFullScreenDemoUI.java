@@ -15,7 +15,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
-import org.vaadin.alump.gofullscreen.gwt.client.GoFullScreenButton;
+import org.vaadin.alump.gofullscreen.FullScreenNativeButton;
 
 import javax.servlet.annotation.WebServlet;
 import java.util.HashSet;
@@ -31,7 +31,7 @@ public class GoFullScreenDemoUI extends UI {
     protected HorizontalLayout buttonLayout;
     protected FullScreenButton windowFullScreenButton;
     protected Window extraWindow;
-    protected final Set<FullScreenButton> buttons = new HashSet<FullScreenButton>();
+    protected final Set<Component> buttons = new HashSet<Component>();
     protected Image image;
 
     @WebServlet(value = "/*")
@@ -44,6 +44,7 @@ public class GoFullScreenDemoUI extends UI {
 
         VerticalLayout layout = new VerticalLayout();
         layout.setMargin(true);
+        layout.setSpacing(true);
         layout.setWidth("100%");
         setContent(layout);
 
@@ -52,6 +53,7 @@ public class GoFullScreenDemoUI extends UI {
         layout.addComponent(notice);
 
         buttonLayout = new HorizontalLayout();
+        buttonLayout.setSpacing(true);
         buttonLayout.setCaption("Full screen actions:");
         layout.addComponent(buttonLayout);
 
@@ -94,7 +96,7 @@ public class GoFullScreenDemoUI extends UI {
         buttonLayout.addComponent(uiButton);
         buttons.add(uiButton);
 
-        FullScreenButton button2 = new FullScreenButton("Picture");
+        FullScreenNativeButton button2 = new FullScreenNativeButton("Picture");
         button2.addFullScreenChangeListener(new FullScreenChangeListener() {
 
             @Override
@@ -128,7 +130,7 @@ public class GoFullScreenDemoUI extends UI {
         buttonLayout.addComponent(button3);
         buttons.add(button3);
 
-        FullScreenButton button4 = new FullScreenButton("Video");
+        FullScreenNativeButton button4 = new FullScreenNativeButton("Video");
         button4.addFullScreenChangeListener(new FullScreenChangeListener() {
 
             @Override
@@ -225,7 +227,7 @@ public class GoFullScreenDemoUI extends UI {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 boolean value = (Boolean) event.getProperty().getValue();
-                for (FullScreenButton button : buttons) {
+                for (Component button : buttons) {
                     button.setEnabled(!value);
                 }
             }
