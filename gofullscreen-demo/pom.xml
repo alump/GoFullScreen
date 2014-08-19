@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 	<name>GoFullScreen demo</name>
 	<description>GoFullScreen Demo Application</description>
-	<version>0.4.0</version>
+	<version>0.4.1-SNAPSHOT</version>
 
 	<properties>
 		<Implementation-Version>${project.version}</Implementation-Version>
@@ -258,5 +258,50 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>faster</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.vaadin</groupId>
+						<artifactId>vaadin-maven-plugin</artifactId>
+						<version>${vaadin.plugin.version}</version>
+
+						<configuration>
+							<webappDirectory>src/main/webapp/VAADIN/widgetsets</webappDirectory>
+							<hostedWebapp>src/main/webapp/VAADIN/widgetsets</hostedWebapp>
+
+							<modules>
+								<module>${project.widgetset}</module>
+							</modules>
+
+							<force>true</force>
+							<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+							<noServer>true</noServer>
+							<runTarget>http://localhost:8080/gofullscreen</runTarget>
+							<port>8080</port>
+							<draftCompile>true</draftCompile>
+							<style>PRETTY</style>
+							<force>true</force>
+							<strict>true</strict>
+							<compileReport>false</compileReport>
+						</configuration>
+
+						<executions>
+							<execution>
+								<goals>
+									<goal>resources</goal>
+									<goal>compile</goal>
+									<goal>test</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
