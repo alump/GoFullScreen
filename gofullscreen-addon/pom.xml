@@ -5,7 +5,7 @@
 	<artifactId>gofullscreen-addon</artifactId>
 	<packaging>jar</packaging>
 	<name>GoFullscreen addon</name>
-	<version>0.4.0-SNAPSHOT</version>
+	<version>0.4.0</version>
 
 	<description>GoFullScreen Vaadin 7 addon</description>
 

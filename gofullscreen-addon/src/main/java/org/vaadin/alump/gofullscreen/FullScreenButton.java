@@ -1,5 +1,6 @@
 package org.vaadin.alump.gofullscreen;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class FullScreenButton extends Button {
     /**
      * Interface for fullscreen state change listeners of target component.
      */
-    public interface FullScreenChangeListener {
+    public interface FullScreenChangeListener extends Serializable {
         /**
          * Called when target component's fullscreen state changes.
          *
