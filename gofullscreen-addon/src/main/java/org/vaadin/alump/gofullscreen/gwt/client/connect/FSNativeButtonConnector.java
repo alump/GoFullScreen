@@ -5,6 +5,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.vaadin.client.BrowserInfo;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.client.ui.nativebutton.NativeButtonConnector;
@@ -82,12 +83,12 @@ public class FSNativeButtonConnector extends NativeButtonConnector implements FS
             }
             JavaScriptObject target = getTargetElement();
             if (FSButtonUtil.isInFullScreenMode(target)) {
-                // VConsole.log("FullScreen: toogle off");
+                // LOGGER.fine("FullScreen: toogle off");
                 FSButtonUtil.cancelFullScreen();
                 notifyStateChange();
             } else {
-                // VConsole.log("FullScreen: toogle on");
-                FSButtonUtil.requestFullScreen(target);
+                // LOGGER.fine("FullScreen: toogle on");
+                FSButtonUtil.requestFullScreen(target, BrowserInfo.get().isSafari());
                 notifyStateChange();
             }
         }

@@ -1,6 +1,7 @@
 package org.vaadin.alump.gofullscreen.gwt.client.connect;
 
 import com.google.gwt.dom.client.Document;
+import com.vaadin.client.BrowserInfo;
 import org.vaadin.alump.gofullscreen.gwt.client.VFSButton;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonState;
 
@@ -83,12 +84,12 @@ public class FSButtonConnector extends ButtonConnector implements FSButtonCIF {
             }
             JavaScriptObject target = getTargetElement();
             if (FSButtonUtil.isInFullScreenMode(target)) {
-                // VConsole.log("FullScreen: toogle off");
+                // LOGGER.fine("FullScreen: toogle off");
                 FSButtonUtil.cancelFullScreen();
                 notifyStateChange();
             } else {
-                // VConsole.log("FullScreen: toogle on");
-                FSButtonUtil.requestFullScreen(target);
+                // LOGGER.fine("FullScreen: toogle on");
+                FSButtonUtil.requestFullScreen(target, BrowserInfo.get().isSafari());
                 notifyStateChange();
             }
         }

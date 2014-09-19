@@ -26,12 +26,21 @@ public class FSButtonUtil {
         return !(element != $doc.fullscreenElement && element != $doc.mozFullScreenElement && element != $doc.webkitFullscreenElement && element != $doc.msFullscreenElement);
     }-*/;
 
-    public native final static boolean requestFullScreen(JavaScriptObject element)
+    /**
+     * Request browser to fullscreen given element
+     * @param element Element fullscreened
+     * @param safari true if browser is safari
+     */
+    public native final static void requestFullScreen(JavaScriptObject element, boolean safari)
 	/*-{
         if (element.requestFullscreen) {
             element.requestFullscreen();
         } else if (element.webkitRequestFullScreen) {
-            element.webkitRequestFullScreen();
+            if(safari) {
+                element.webkitRequestFullScreen();
+            } else {
+                element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
         } else if (element.mozRequestFullScreen) {
             element.mozRequestFullScreen();
         } else if (element.msRequestFullscreen) {
