@@ -3,6 +3,7 @@ package org.vaadin.alump.gofullscreen.gwt.client.connect;
 import com.google.gwt.dom.client.Document;
 import com.vaadin.client.BrowserInfo;
 import org.vaadin.alump.gofullscreen.gwt.client.VFSButton;
+import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonServerRpc;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonState;
 
 import com.google.gwt.core.client.JavaScriptObject;

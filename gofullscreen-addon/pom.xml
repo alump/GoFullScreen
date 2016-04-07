@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vaadin.alump.gofullscreen</groupId>
 	<artifactId>gofullscreen-addon</artifactId>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<name>GoFullscreen addon</name>
-	<version>0.4.1</version>
+	<version>0.5.0</version>
 
 	<description>GoFullScreen Vaadin 7 addon</description>
 
@@ -31,15 +31,16 @@
 
 		<!-- May be overridden by the build system -->
 		<license.short.name>apache2</license.short.name>
-		<vaadin.version>7.2.7</vaadin.version>
-		<vaadin.plugin.version>7.2.7</vaadin.plugin.version>
+		<vaadin.version>7.6.4</vaadin.version>
+		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 
 		<Implementation-Version>${project.version}</Implementation-Version>
 		<!-- Must not change this because of the Directory -->
 		<Implementation-Title>GoFullScreen</Implementation-Title>
 		<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
 		<Vaadin-Addon>GoFullScreen-${project.version}.jar</Vaadin-Addon>
-        <Vaadin-Widgetset>org.vaadin.alump.gofullscreen.gwt.GoFullScreenWidgetSet</Vaadin-Widgetset>
+        <Vaadin-Widgetsets>org.vaadin.alump.gofullscreen.gwt.GoFullScreenWidgetSet</Vaadin-Widgetsets>
+		<Vaadin-Stylesheets>VAADIN/addons/gofullscreen/gofullscreen.scss</Vaadin-Stylesheets>
 
 	</properties>
 
@@ -78,11 +79,6 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -122,44 +118,60 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
 				<configuration>
+					<instructions>
+						<Export-Package>
+							org.vaadin.alump.gofullscreen,
+							org.vaadin.alump.gofullscreen.gwt.client.shared
+						</Export-Package>
+						<Import-Package>com.vaadin.data;version="[7.4,8)",
+							com.vaadin.shared;version="[7.4,8)",
+							com.vaadin.shared.communication;version="[7.4,8)",
+							com.vaadin.shared.ui;version="[7.4,8)",
+							com.vaadin.ui;version="[7.4,8)"</Import-Package>
+					</instructions>
 					<archive>
 						<index>true</index>
 						<manifest>
 							<addClasspath>false</addClasspath>
-							<!-- Implementation-Title and Implementation-Version come from the 
+							<!-- Implementation-Title and Implementation-Version come from the
 								POM by default -->
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
 						<manifestEntries>
 							<!-- Keep old name of addon -->
-							<Implementation-Title>GoFullScreen</Implementation-Title>
+							<Implementation-Title>ScaleImage</Implementation-Title>
 
 							<!-- Package format version - do not change -->
 							<Vaadin-Package-Version>1</Vaadin-Package-Version>
 
 							<!-- Comma-separated list of widgetsets in the package -->
-							<Vaadin-Widgetsets>${Vaadin-Widgetset}</Vaadin-Widgetsets>
+							<Vaadin-Widgetsets>${Vaadin-Widgetsets}</Vaadin-Widgetsets>
+
+							<Vaadin-Stylesheets>${Vaadin-Stylesheets}</Vaadin-Stylesheets>
 						</manifestEntries>
 					</archive>
-					<!-- exclude other META-INF data under build directory -->
-					<includes>
-						<include>META-INF/maven/${project.groupId}/${project.artifactId}/**</include>
-						<include>org/**</include>
-					</includes>
 				</configuration>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>${vaadin.plugin.version}</version>
 				<configuration>
 					<modules>
-						<module>${Vaadin-Widgetset}</module>
+						<module>${Vaadin-Widgetsets}</module>
 					</modules>
 					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
 					<runTarget>xsite</runTarget>
@@ -267,5 +279,19 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+
+		<!-- This is needed for the sources required by the client-side compiler to be
+		included in the produced JARs -->
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<excludes>
+					<exclude>rebel.xml</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 	</build>
 </project>

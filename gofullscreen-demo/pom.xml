@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 	<name>GoFullScreen demo</name>
 	<description>GoFullScreen Demo Application</description>
-	<version>0.4.1</version>
+	<version>0.5.0</version>
 
 	<properties>
 		<Implementation-Version>${project.version}</Implementation-Version>
@@ -16,8 +16,8 @@
 
 		<!-- May be overridden by the build system -->
 		<license.short.name>apache2</license.short.name>
-		<vaadin.version>7.2.7</vaadin.version>
-		<vaadin.plugin.version>7.2.7</vaadin.plugin.version>
+		<vaadin.version>7.6.4</vaadin.version>
+		<vaadin.plugin.version>7.6.4</vaadin.plugin.version>
 
 		<!-- Must not change this because of the Directory -->
 		<Implementation-Title>GoFullScreen</Implementation-Title>
@@ -99,8 +99,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
@@ -133,8 +133,10 @@
 					<execution>
 						<goals>
 							<goal>resources</goal>
+							<goal>update-widgetset</goal>
+							<goal>compile-theme</goal>
+							<goal>update-theme</goal>
 							<goal>compile</goal>
-							<goal>test</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -189,17 +191,13 @@
 
 			<!-- Jetty is used for development testing -->
 			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
+				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.1.13.v20130916</version>
+				<version>9.2.6.v20141205</version>
 				<configuration>
-					<stopPort>9966</stopPort>
-					<stopKey>gofullscreen</stopKey>
-					<scanIntervalSeconds>0</scanIntervalSeconds>
-					<!-- make sure Jetty also finds the widgetset -->
-					<webAppConfig>
-						<contextPath>/gofullscreen</contextPath>
-					</webAppConfig>
+					<webApp>
+						<contextPath>/</contextPath>
+					</webApp>
 				</configuration>
 			</plugin>
 

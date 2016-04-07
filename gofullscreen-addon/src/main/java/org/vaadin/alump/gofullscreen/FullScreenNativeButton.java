@@ -2,7 +2,7 @@ package org.vaadin.alump.gofullscreen;
 
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.NativeButton;
-import org.vaadin.alump.gofullscreen.gwt.client.connect.FSButtonServerRpc;
+import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonServerRpc;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonState;
 
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ import java.util.List;
 public class FullScreenNativeButton extends NativeButton {
 
     private boolean targetIsFullscreen = false;
-    private final List<FullScreenButton.FullScreenChangeListener> fsListeners = new LinkedList<FullScreenButton.FullScreenChangeListener>();
+    private final List<FullScreenListener> fsListeners = new LinkedList<FullScreenListener>();
 
     /**
      * Create new full screen button.
@@ -63,9 +63,10 @@ public class FullScreenNativeButton extends NativeButton {
     protected void setFullScreenState(boolean fullscreen) {
         if (targetIsFullscreen != fullscreen) {
             targetIsFullscreen = fullscreen;
-            for (FullScreenButton.FullScreenChangeListener listener : fsListeners) {
-                listener.onFullScreenChangeListener(getFullScreenTarget(),
-                        targetIsFullscreen);
+            final FullScreenEvent event = new FullScreenEvent(this, getFullScreenTarget(), targetIsFullscreen);
+
+            for (FullScreenListener listener : fsListeners) {
+                listener.onFullScreenEvent(event);
             }
         }
     }
@@ -110,7 +111,7 @@ public class FullScreenNativeButton extends NativeButton {
      *
      * @param listener
      */
-    public void addFullScreenChangeListener(FullScreenButton.FullScreenChangeListener listener) {
+    public void addFullScreenListener(FullScreenListener listener) {
         fsListeners.add(listener);
     }
 
@@ -119,7 +120,7 @@ public class FullScreenNativeButton extends NativeButton {
      *
      * @param listener
      */
-    public void removeFullScreenChangeListener(FullScreenButton.FullScreenChangeListener listener) {
+    public void removeFullScreenListener(FullScreenListener listener) {
         fsListeners.remove(listener);
     }
 

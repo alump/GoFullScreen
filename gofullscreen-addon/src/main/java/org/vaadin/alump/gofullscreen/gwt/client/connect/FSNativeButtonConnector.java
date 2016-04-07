@@ -11,6 +11,7 @@ import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.client.ui.nativebutton.NativeButtonConnector;
 import com.vaadin.shared.ui.Connect;
 import org.vaadin.alump.gofullscreen.gwt.client.VFSNativeButton;
+import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonServerRpc;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSNativeButtonState;
 
 import java.util.logging.Logger;

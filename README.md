@@ -11,3 +11,10 @@ components inside it (like images or videos).
 * Source code: [https://github.com/alump/GoFullScreen](https://github.com/alump/GoFullScreen)
 * Vaadin Directory: [https://vaadin.com/directory#addon/gofullscreen](https://vaadin.com/directory#addon/gofullscreen)
 * License: Apache License 2.0
+
+## Release notes
+
+### Version 0.5.0 (2016-04-07)
+- OSGi bundled
+- Listener API cleanup (API break)
+- Moved to use SCSS theming (add-on currently do not include any theming rules, so no actions required)

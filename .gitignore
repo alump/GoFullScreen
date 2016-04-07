@@ -13,3 +13,5 @@ gofullscreen-demo/src/main/webapp/VAADIN/widgetsets/
 gofullscreen-addon/target/
 gofullscreen-demo/target/
 *.iml
+gofullscreen-demo/src/main/webapp/VAADIN/themes/demo/styles.css
+gofullscreen-demo/src/main/webapp/VAADIN/themes/demo/addons.scss

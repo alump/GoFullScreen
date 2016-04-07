@@ -4,4 +4,6 @@
 <module>
 	<inherits name="org.vaadin.alump.gofullscreen.gwt.GoFullScreenWidgetSet"/>
 	<!-- <set-property name="user.agent" value="safari"/> -->
+
+    <inherits name="com.vaadin.DefaultWidgetSet" />
 </module>
