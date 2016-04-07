@@ -278,7 +278,7 @@
 							<force>true</force>
 							<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
 							<noServer>true</noServer>
-							<runTarget>http://localhost:8080/gofullscreen</runTarget>
+							<runTarget>http://localhost:8080/</runTarget>
 							<port>8080</port>
 							<draftCompile>true</draftCompile>
 							<style>PRETTY</style>
