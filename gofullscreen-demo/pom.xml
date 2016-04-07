@@ -291,8 +291,10 @@
 							<execution>
 								<goals>
 									<goal>resources</goal>
+									<goal>update-widgetset</goal>
+									<goal>compile-theme</goal>
+									<goal>update-theme</goal>
 									<goal>compile</goal>
-									<goal>test</goal>
 								</goals>
 							</execution>
 						</executions>

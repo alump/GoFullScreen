@@ -102,7 +102,7 @@
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
 						<manifestEntries>
-							<Implementation-Title>Picker source</Implementation-Title>
+							<Implementation-Title>GoFullScreen source</Implementation-Title>
 						</manifestEntries>
 					</archive>
 					<outputDirectory>target/extra</outputDirectory>
