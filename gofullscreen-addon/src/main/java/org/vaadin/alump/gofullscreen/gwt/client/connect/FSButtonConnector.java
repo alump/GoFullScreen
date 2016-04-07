@@ -1,7 +1,10 @@
 package org.vaadin.alump.gofullscreen.gwt.client.connect;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.BrowserInfo;
+import com.vaadin.client.ComponentConnector;
+import com.vaadin.shared.Connector;
 import org.vaadin.alump.gofullscreen.gwt.client.VFSButton;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonServerRpc;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonState;
@@ -24,9 +27,10 @@ import java.util.logging.Logger;
 @Connect(org.vaadin.alump.gofullscreen.FullScreenButton.class)
 public class FSButtonConnector extends ButtonConnector implements FSButtonCIF {
 
-    private JavaScriptObject fullscreenTarget;
-    private boolean isInFullScreen = false;
+    private Connector fullscreenTarget;
     private boolean supported = false;
+
+    private FSClientUtil clientUtil;
 
     private static final Logger LOGGER = Logger.getLogger(FSButtonConnector.class.getName());
 
@@ -48,6 +52,8 @@ public class FSButtonConnector extends ButtonConnector implements FSButtonCIF {
     public void init() {
         super.init();
 
+        clientUtil = new FSClientUtil(getRpcProxy(FSButtonServerRpc.class));
+
         supported = FSButtonUtil.isFullscreenSupported(Document.get().getBody());
         if (supported) {
             FSButtonUtil.addInstance(this);
@@ -55,17 +61,13 @@ public class FSButtonConnector extends ButtonConnector implements FSButtonCIF {
     }
 
     @Override
-    public void onStateChanged(StateChangeEvent stateChangeEvent) {
-        super.onStateChanged(stateChangeEvent);
+    public void onStateChanged(StateChangeEvent event) {
+        super.onStateChanged(event);
 
-        if (fullscreenTarget != getState().fullscreenTarget) {
-            if (getState().fullscreenTarget == null) {
-                fullscreenTarget = null;
-            } else {
-                fullscreenTarget = ((AbstractComponentConnector) (getState().fullscreenTarget))
-                        .getWidget().getElement();
+        if(event.isInitialStateChange() || event.hasPropertyChanged("fullscreenTarget")) {
+            if(getState().fullscreenTarget != null) {
+                notifyStateChange();
             }
-            notifyStateChange();
         }
 
         if (!FSButtonUtil.isFullscreenSupported(Document.get().getBody())) {
@@ -83,39 +85,16 @@ public class FSButtonConnector extends ButtonConnector implements FSButtonCIF {
                 LOGGER.fine("Ignoring click when not enabled.");
                 return;
             }
-            JavaScriptObject target = getTargetElement();
-            if (FSButtonUtil.isInFullScreenMode(target)) {
-                // LOGGER.fine("FullScreen: toogle off");
-                FSButtonUtil.cancelFullScreen();
-                notifyStateChange();
-            } else {
-                // LOGGER.fine("FullScreen: toogle on");
-                FSButtonUtil.requestFullScreen(target, BrowserInfo.get().isSafari());
-                notifyStateChange();
-            }
+            clientUtil.handleClick(getTargetElement());
         }
 
     };
 
-    protected void notifyStateChange() {
-        if (FSButtonUtil.isInFullScreenMode(getTargetElement())) {
-            if (!isInFullScreen) {
-                isInFullScreen = true;
-                getRpcProxy(FSButtonServerRpc.class).enteredFullscreen();
-            }
-        } else {
-            if (isInFullScreen) {
-                isInFullScreen = false;
-                getRpcProxy(FSButtonServerRpc.class).leftFullscreen();
-            }
-        }
-    }
-
     protected JavaScriptObject getTargetElement() {
-        if (fullscreenTarget == null) {
+        if (getState().fullscreenTarget == null) {
             return RootPanel.getBodyElement();
         } else {
-            return fullscreenTarget;
+            return clientUtil.getTargetJavaScriptObject(getState().fullscreenTarget);
         }
     }
 
@@ -130,6 +109,10 @@ public class FSButtonConnector extends ButtonConnector implements FSButtonCIF {
     public void onUnregister() {
         FSButtonUtil.removeInstance(this);
         super.onUnregister();
+    }
+
+    protected void notifyStateChange() {
+        clientUtil.notifyStateChange(getTargetElement());
     }
 
 }

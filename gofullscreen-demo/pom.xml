@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 	<name>GoFullScreen demo</name>
 	<description>GoFullScreen Demo Application</description>
-	<version>0.5.0</version>
+	<version>0.5.1-SNAPSHOT</version>
 
 	<properties>
 		<Implementation-Version>${project.version}</Implementation-Version>

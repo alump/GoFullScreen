@@ -14,6 +14,10 @@ components inside it (like images or videos).
 
 ## Release notes
 
+### Version 0.5.1 (2015-04-08)
+- Add experimental support for fullscreening from menu bar. MenuBar is sadly hard to extend nicely, so you need to use
+FullScreenMenuBar instead of MenuBar to get extended fullscreen features.
+
 ### Version 0.5.0 (2016-04-07)
 - OSGi bundled
 - Listener API cleanup (API break)

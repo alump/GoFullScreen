@@ -1,5 +1,6 @@
 package org.vaadin.alump.gofullscreen;
 
+import com.vaadin.shared.Connector;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.NativeButton;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonServerRpc;
@@ -50,12 +51,12 @@ public class FullScreenNativeButton extends NativeButton {
 
     private final FSButtonServerRpc serverRpc = new FSButtonServerRpc() {
         @Override
-        public void enteredFullscreen() {
+        public void enteredFullscreen(Connector connector) {
             setFullScreenState(true);
         }
 
         @Override
-        public void leftFullscreen() {
+        public void leftFullscreen(Connector connector) {
             setFullScreenState(false);
         }
     };

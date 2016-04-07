@@ -5,7 +5,9 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.BrowserInfo;
+import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.client.ui.nativebutton.NativeButtonConnector;
@@ -24,8 +26,9 @@ import java.util.logging.Logger;
 public class FSNativeButtonConnector extends NativeButtonConnector implements FSButtonCIF {
 
     private JavaScriptObject fullscreenTarget;
-    private boolean isInFullScreen = false;
     private boolean supported = false;
+
+    private FSClientUtil clientUtil;
 
     private static final Logger LOGGER = Logger.getLogger(FSNativeButtonConnector.class.getName());
 
@@ -47,6 +50,8 @@ public class FSNativeButtonConnector extends NativeButtonConnector implements FS
     public void init() {
         super.init();
 
+        clientUtil = new FSClientUtil(getRpcProxy(FSButtonServerRpc.class));
+
         supported = FSButtonUtil.isFullscreenSupported(Document.get().getBody());
         if (supported) {
             FSButtonUtil.addInstance(this);
@@ -61,8 +66,7 @@ public class FSNativeButtonConnector extends NativeButtonConnector implements FS
             if (getState().fullscreenTarget == null) {
                 fullscreenTarget = null;
             } else {
-                fullscreenTarget = ((AbstractComponentConnector) (getState().fullscreenTarget))
-                        .getWidget().getElement();
+                fullscreenTarget = clientUtil.getTargetJavaScriptObject(getState().fullscreenTarget);
             }
             notifyStateChange();
         }
@@ -82,32 +86,13 @@ public class FSNativeButtonConnector extends NativeButtonConnector implements FS
                 LOGGER.fine("Ignoring click when not enabled.");
                 return;
             }
-            JavaScriptObject target = getTargetElement();
-            if (FSButtonUtil.isInFullScreenMode(target)) {
-                // LOGGER.fine("FullScreen: toogle off");
-                FSButtonUtil.cancelFullScreen();
-                notifyStateChange();
-            } else {
-                // LOGGER.fine("FullScreen: toogle on");
-                FSButtonUtil.requestFullScreen(target, BrowserInfo.get().isSafari());
-                notifyStateChange();
-            }
+            clientUtil.handleClick(getTargetElement());
         }
 
     };
 
     protected void notifyStateChange() {
-        if (FSButtonUtil.isInFullScreenMode(getTargetElement())) {
-            if (!isInFullScreen) {
-                isInFullScreen = true;
-                getRpcProxy(FSButtonServerRpc.class).enteredFullscreen();
-            }
-        } else {
-            if (isInFullScreen) {
-                isInFullScreen = false;
-                getRpcProxy(FSButtonServerRpc.class).leftFullscreen();
-            }
-        }
+        clientUtil.notifyStateChange(getTargetElement());
     }
 
     protected JavaScriptObject getTargetElement() {

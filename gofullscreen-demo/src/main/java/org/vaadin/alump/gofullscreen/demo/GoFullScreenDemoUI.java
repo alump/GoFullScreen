@@ -10,6 +10,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
+import org.vaadin.alump.gofullscreen.FullScreenMenuBar;
 import org.vaadin.alump.gofullscreen.FullScreenNativeButton;
 
 import javax.servlet.annotation.WebServlet;
@@ -136,6 +137,11 @@ public class GoFullScreenDemoUI extends UI {
         buttonLayout.addComponent(windowFullScreenButton);
         buttons.add(windowFullScreenButton);
         windowFullScreenButton.setVisible(false);
+
+        FullScreenMenuBar menuBar = new FullScreenMenuBar();
+        MenuBar.MenuItem menuItem = menuBar.addItem("Menu", null);
+        MenuBar.
+
 
         image = new Image();
         image.addStyleName("demo-image");

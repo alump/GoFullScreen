@@ -11,9 +11,9 @@ import java.io.Serializable;
 public class FullScreenEvent implements Serializable {
     private final Component component;
     private final boolean fullscreen;
-    private final Button source;
+    private final Component source;
 
-    public FullScreenEvent(Button source, Component component, boolean fullscreen) {
+    public FullScreenEvent(Component source, Component component, boolean fullscreen) {
         this.source = source;
         this.component = component;
         this.fullscreen = fullscreen;
@@ -23,7 +23,7 @@ public class FullScreenEvent implements Serializable {
      * Get source button
      * @return Fullscreen button sending events
      */
-    public Button getSource() {
+    public Component getSource() {
         return source;
     }
 
