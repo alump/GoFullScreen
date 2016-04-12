@@ -7,12 +7,16 @@ GoFullScreen add on provides button that will handle fullscreen mode switching
 on client side. Can be used to fullscreen whole Vaadin application or single
 components inside it (like images or videos).
 
-* Demo application: [http://siika.fi:8080/GoFullScreenDemo/](http://siika.fi:8080/GoFullScreenDemo/)
+* Demo application: [http://app.siika.fi/GoFullScreenDemo/](http://app.siika.fi/GoFullScreenDemo/)
 * Source code: [https://github.com/alump/GoFullScreen](https://github.com/alump/GoFullScreen)
 * Vaadin Directory: [https://vaadin.com/directory#addon/gofullscreen](https://vaadin.com/directory#addon/gofullscreen)
 * License: Apache License 2.0
 
 ## Release notes
+
+### Version 0.5.3 (2016-04-12)
+- Fixing project manifest files to format accepted again by Vaadin Directory
+- Cleaning API little more, as 0.5.0 release failed. Allowing adding non-button components later.
 
 ### Version 0.5.0 (2016-04-07)
 - OSGi bundled

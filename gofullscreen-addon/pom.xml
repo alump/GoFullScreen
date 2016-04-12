@@ -5,7 +5,7 @@
 	<artifactId>gofullscreen-addon</artifactId>
 	<packaging>bundle</packaging>
 	<name>GoFullscreen addon</name>
-	<version>0.5.0</version>
+	<version>0.5.3</version>
 
 	<description>GoFullScreen Vaadin 7 addon</description>
 
@@ -38,6 +38,7 @@
 		<!-- Must not change this because of the Directory -->
 		<Implementation-Title>GoFullScreen</Implementation-Title>
 		<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+		<Vaadin-License-Title>Apache License 2.0</Vaadin-License-Title>
 		<Vaadin-Addon>GoFullScreen-${project.version}.jar</Vaadin-Addon>
         <Vaadin-Widgetsets>org.vaadin.alump.gofullscreen.gwt.GoFullScreenWidgetSet</Vaadin-Widgetsets>
 		<Vaadin-Stylesheets>VAADIN/addons/gofullscreen/gofullscreen.scss</Vaadin-Stylesheets>
@@ -143,7 +144,7 @@
 						</manifest>
 						<manifestEntries>
 							<!-- Keep old name of addon -->
-							<Implementation-Title>ScaleImage</Implementation-Title>
+							<Implementation-Title>GoFullScreen</Implementation-Title>
 
 							<!-- Package format version - do not change -->
 							<Vaadin-Package-Version>1</Vaadin-Package-Version>
@@ -152,6 +153,8 @@
 							<Vaadin-Widgetsets>${Vaadin-Widgetsets}</Vaadin-Widgetsets>
 
 							<Vaadin-Stylesheets>${Vaadin-Stylesheets}</Vaadin-Stylesheets>
+
+							<Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
 						</manifestEntries>
 					</archive>
 				</configuration>
@@ -237,45 +240,6 @@
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9</version>
-					<configuration>
-						<archive>
-							<index>true</index>
-							<manifest>
-								<addClasspath>false</addClasspath>
-								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							</manifest>
-							<manifestEntries>
-								<Implementation-Title>GoFullScreen documentation</Implementation-Title>
-							</manifestEntries>
-						</archive>
-						<links>
-							<link>http://docs.oracle.com/javase/6/docs/api/</link>
-							<link>https://vaadin.com/api/</link>
-						</links>
-						<doctitle>GoFullScreen Vaadin Addon</doctitle>
-						<sourcepath>src/main/java</sourcepath>
-						<show>public</show>
-						<source>1.6</source>
-						<nohelp>true</nohelp>
-						<excludePackageNames>*.gwt.*</excludePackageNames>
-					</configuration>
-					<executions>
-						<execution>
-							<id>aggregate-jar</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-							<configuration>
-								<includeDependencySources>true</includeDependencySources>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>

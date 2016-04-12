@@ -55,7 +55,7 @@ public class GoFullScreenDemoUI extends UI {
 
         final FullScreenButton button = new FullScreenButton("All (turn on)");
         button.addFullScreenListener(event -> {
-            if (event.isFullscreen()) {
+            if (event.isFullScreen()) {
                 System.out.println("View is now fullscreen");
                 event.getSource().setCaption("All (turn off)");
             } else {
@@ -68,7 +68,7 @@ public class GoFullScreenDemoUI extends UI {
 
         final FullScreenButton uiButton = new FullScreenButton("UI");
         uiButton.addFullScreenListener(event -> {
-            if (event.isFullscreen()) {
+            if (event.isFullScreen()) {
                 System.out.println("UI is now fullscreen");
                 event.getSource().setCaption("UI (turn off)");
             } else {
@@ -82,7 +82,7 @@ public class GoFullScreenDemoUI extends UI {
 
         FullScreenNativeButton button2 = new FullScreenNativeButton("Picture");
         button2.addFullScreenListener(event -> {
-            if (event.isFullscreen()) {
+            if (event.isFullScreen()) {
                 System.out.println("Picture is now fullscreen");
             } else {
                 System.out.println("Picture isn't anymore fullscreen");
@@ -93,7 +93,7 @@ public class GoFullScreenDemoUI extends UI {
 
         FullScreenButton button3 = new FullScreenButton("Label");
         button3.addFullScreenListener(event -> {
-            if (event.isFullscreen()) {
+            if (event.isFullScreen()) {
                 System.out.println("Label is now fullscreen");
             } else {
                 System.out.println("Label isn't anymore fullscreen");
@@ -104,7 +104,7 @@ public class GoFullScreenDemoUI extends UI {
 
         FullScreenNativeButton button4 = new FullScreenNativeButton("Video");
         button4.addFullScreenListener(event -> {
-            if (event.isFullscreen()) {
+            if (event.isFullScreen()) {
                 System.out.println("Video is now fullscreen");
             } else {
                 System.out.println("Video isn't anymore fullscreen");
@@ -116,9 +116,7 @@ public class GoFullScreenDemoUI extends UI {
         openWindowButton = new Button("Window (Open)");
         openWindowButton.addClickListener(event -> {
             createExtraWindow();
-            windowFullScreenButton
-                    .setFullScreenTarget((AbstractComponent) extraWindow
-                            .getContent());
+            windowFullScreenButton.setFullScreenTarget(extraWindow.getContent());
             windowFullScreenButton.setVisible(true);
             openWindowButton.setVisible(false);
         });
@@ -127,7 +125,7 @@ public class GoFullScreenDemoUI extends UI {
 
         windowFullScreenButton = new FullScreenButton("Window (FS)");
         windowFullScreenButton.addFullScreenListener(event -> {
-            if (event.isFullscreen()) {
+            if (event.isFullScreen()) {
                 System.out.println("Window is now fullscreen");
             } else {
                 System.out.println("Window isn't anymore fullscreen");
