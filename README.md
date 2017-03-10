@@ -14,6 +14,9 @@ components inside it (like images or videos).
 
 ## Release notes
 
+### Version 0.6.0 (2017-03-10)
+- Version 0.6.0 and versions after it require and support Vaadin 8. For Vaadin 7, use 0.5.x versions.
+
 ### Version 0.5.3 (2016-04-12)
 - Fixing project manifest files to format accepted again by Vaadin Directory
 - Cleaning API little more, as 0.5.0 release failed. Allowing adding non-button components later.

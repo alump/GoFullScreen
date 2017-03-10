@@ -3,7 +3,7 @@ package org.vaadin.alump.gofullscreen;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.NativeButton;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonServerRpc;
-import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonState;
+import org.vaadin.alump.gofullscreen.gwt.client.shared.FSNativeButtonState;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -72,8 +72,8 @@ public class FullScreenNativeButton extends NativeButton {
     }
 
     @Override
-    protected FSButtonState getState() {
-        return (FSButtonState) super.getState();
+    protected FSNativeButtonState getState() {
+        return (FSNativeButtonState) super.getState();
     }
 
     /**

@@ -1,7 +1,7 @@
 package org.vaadin.alump.gofullscreen.gwt.client.connect;
 
 /**
- * Created by alump on 08/08/14.
+ * Client side listener for fullscreen events
  */
 public interface FSButtonCIF {
 

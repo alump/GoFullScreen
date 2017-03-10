@@ -1,7 +1,6 @@
 package org.vaadin.alump.gofullscreen.demo;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.Property;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
 import org.vaadin.alump.gofullscreen.FullScreenButton;
@@ -174,9 +173,8 @@ public class GoFullScreenDemoUI extends UI {
         layout.addComponent(popupButton);
 
         CheckBox buttonsEnabled = new CheckBox("Buttons disabled");
-        buttonsEnabled.setImmediate(true);
         buttonsEnabled.addValueChangeListener(event -> {
-            boolean value = (Boolean) event.getProperty().getValue();
+            boolean value = event.getValue();
             buttons.forEach(b -> b.setEnabled(!value));
         });
         layout.addComponent(buttonsEnabled);
