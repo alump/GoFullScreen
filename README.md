@@ -14,6 +14,9 @@ components inside it (like images or videos).
 
 ## Release notes
 
+### Version 0.6.1 (TBD)
+- WiP
+
 ### Version 0.6.0 (2017-03-10)
 - Version 0.6.0 and versions after it require and support Vaadin 8. For Vaadin 7, use 0.5.x versions.
 
