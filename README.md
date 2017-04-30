@@ -1,7 +1,7 @@
 GoFullScreen Vaadin UI Component Add On
 =======================================
 
-[![Build Status](http://siika.fi:8888/jenkins/job/GoFullScreen%20(Vaadin)/badge/icon)](http://siika.fi:8888/jenkins/job/GoFullScreen%20(Vaadin)/)
+[![Build Status](https://epic.siika.fi/jenkins/job/GoFullScreen%20(Vaadin)/badge/icon)](https://epic.siika.fi/jenkins/job/GoFullScreen%20(Vaadin)/)
 
 GoFullScreen add on provides button that will handle fullscreen mode switching
 on client side. Can be used to fullscreen whole Vaadin application or single
