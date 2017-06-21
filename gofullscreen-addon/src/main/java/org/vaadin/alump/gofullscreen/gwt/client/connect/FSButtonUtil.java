@@ -26,6 +26,10 @@ public class FSButtonUtil {
         return !(element != $doc.fullscreenElement && element != $doc.mozFullScreenElement && element != $doc.webkitFullscreenElement && element != $doc.msFullscreenElement);
     }-*/;
 
+    public final static void requestFullScreen(JavaScriptObject element) {
+        requestFullScreen(element, BrowserInfo.get().isSafari());
+    }
+
     /**
      * Request browser to fullscreen given element
      * @param element Element fullscreened

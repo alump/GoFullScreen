@@ -3,6 +3,7 @@ package org.vaadin.alump.gofullscreen;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.vaadin.server.Resource;
 import com.vaadin.ui.Component;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonServerRpc;
 import org.vaadin.alump.gofullscreen.gwt.client.shared.FSButtonState;
@@ -35,6 +36,16 @@ public class FullScreenButton extends Button {
      */
     public FullScreenButton(String caption) {
         super(caption);
+        registerRpc(serverRpc);
+    }
+
+    /**
+     * Create full screen button with a icon.
+     *
+     * @param icon Icon of button.
+     */
+    public FullScreenButton(Resource icon) {
+        super(icon);
         registerRpc(serverRpc);
     }
 

@@ -90,7 +90,7 @@ public class FSButtonConnector extends ButtonConnector implements FSButtonCIF {
                 notifyStateChange();
             } else {
                 // LOGGER.fine("FullScreen: toogle on");
-                FSButtonUtil.requestFullScreen(target, BrowserInfo.get().isSafari());
+                FSButtonUtil.requestFullScreen(target);
                 notifyStateChange();
             }
         }

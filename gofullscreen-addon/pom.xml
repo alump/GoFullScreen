@@ -5,7 +5,7 @@
 	<artifactId>gofullscreen-addon</artifactId>
 	<packaging>bundle</packaging>
 	<name>GoFullscreen addon</name>
-	<version>0.6.1-SNAPSHOT</version>
+	<version>0.6.1</version>
 
 	<description>GoFullScreen Vaadin 7 addon</description>
 
@@ -31,7 +31,7 @@
 
 		<!-- May be overridden by the build system -->
 		<license.short.name>apache2</license.short.name>
-		<vaadin.version>8.0.2</vaadin.version>
+		<vaadin.version>8.0.6</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 
 		<Implementation-Version>${project.version}</Implementation-Version>

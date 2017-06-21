@@ -89,7 +89,7 @@ public class FSNativeButtonConnector extends NativeButtonConnector implements FS
                 notifyStateChange();
             } else {
                 // LOGGER.fine("FullScreen: toogle on");
-                FSButtonUtil.requestFullScreen(target, BrowserInfo.get().isSafari());
+                FSButtonUtil.requestFullScreen(target);
                 notifyStateChange();
             }
         }

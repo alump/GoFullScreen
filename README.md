@@ -12,10 +12,30 @@ components inside it (like images or videos).
 * Vaadin Directory: [https://vaadin.com/directory#addon/gofullscreen](https://vaadin.com/directory#addon/gofullscreen)
 * License: Apache License 2.0
 
+## Usage
+
+### Button
+
+```java
+FullScreenButton button = new FullScreenButton(VaadinIcons.EXPAND_FULL);
+button.setFullScreenTarget(componentShownInFullscreen);
+```
+
+### MenuBar
+
+```java
+FullScreenMenuBar menuBar = new FullScreenMenuBar();
+MenuBar.MenuItem view = menuBar.addItem("View", null);
+MenuBar.MenuItem fullscreenImage = view.addItem("Image in fullscreen", null);
+menuBar.addFullScreenMapping(fullscreenImage, imageComponent);
+MenuBar.MenuItem fullscreenAll = view.addItem("All in fullscreen", null);
+menuBar.addFullScreenMapping(fullscreenAll, null);
+```
+
 ## Release notes
 
-### Version 0.6.1 (TBD)
-- WiP
+### Version 0.6.1 (2017-06-21)
+- Add support for MenuBar
 
 ### Version 0.6.0 (2017-03-10)
 - Version 0.6.0 and versions after it require and support Vaadin 8. For Vaadin 7, use 0.5.x versions.

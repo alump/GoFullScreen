@@ -1,6 +1,8 @@
 package org.vaadin.alump.gofullscreen.demo;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
 import org.vaadin.alump.gofullscreen.FullScreenButton;
@@ -9,6 +11,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinRequest;
+import org.vaadin.alump.gofullscreen.FullScreenMenuBar;
 import org.vaadin.alump.gofullscreen.FullScreenNativeButton;
 
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +23,6 @@ import java.util.Set;
 @Title("GoFullScreen Demo")
 public class GoFullScreenDemoUI extends UI {
 
-    protected Label notice;
     protected Button openWindowButton;
     protected HorizontalLayout buttonLayout;
     protected FullScreenButton windowFullScreenButton;
@@ -43,9 +45,9 @@ public class GoFullScreenDemoUI extends UI {
         layout.setWidth("100%");
         setContent(layout);
 
-        notice = new Label(
-                "Notice: Full screen buttons are hidden for unsupported browsers (IE <11, iOS Safari...)");
-        layout.addComponent(notice);
+        FullScreenMenuBar menuBar = new FullScreenMenuBar();
+        menuBar.setWidth(100, Unit.PERCENTAGE);
+        layout.addComponents(menuBar);
 
         buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing(true);
@@ -178,6 +180,20 @@ public class GoFullScreenDemoUI extends UI {
             buttons.forEach(b -> b.setEnabled(!value));
         });
         layout.addComponent(buttonsEnabled);
+
+        MenuBar.MenuItem parent = menuBar.addItem("MenuBar Example", null);
+        menuBar.addFullScreenMapping(parent.addItem("Image to FullScreen", VaadinIcons.PICTURE, null),
+                image);
+        parent.addItem("Normal Item", VaadinIcons.QUESTION, menuItem -> Notification.show("Normal item clicked"));
+        menuBar.addFullScreenMapping(parent.addItem("Video to FullScreen", VaadinIcons.FILM, null),
+                video);
+        menuBar.addFullScreenMapping(parent.addItem("Whole UI to FullScreen", VaadinIcons.EXPAND_FULL, null),
+                UI.getCurrent());
+        menuBar.addFullScreenMapping(parent.addItem("FullScreen Everything", VaadinIcons.EXPAND_FULL, null),
+                null);
+        MenuBar.MenuItem links = menuBar.addItem("Links", null);
+        links.addItem("GitHub", menuItem ->
+                Page.getCurrent().open("https://github.com/alump/GoFullScreen", "github"));
     }
 
     private void createExtraWindow() {

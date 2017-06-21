@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 	<name>GoFullScreen demo</name>
 	<description>GoFullScreen Demo Application</description>
-	<version>0.6.1-SNAPSHOT</version>
+	<version>0.6.1</version>
 
 	<properties>
 		<Implementation-Version>${project.version}</Implementation-Version>
@@ -16,7 +16,7 @@
 
 		<!-- May be overridden by the build system -->
 		<license.short.name>apache2</license.short.name>
-		<vaadin.version>8.0.2</vaadin.version>
+		<vaadin.version>8.0.6</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
 
@@ -109,34 +109,27 @@
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>${vaadin.plugin.version}</version>
-
 				<configuration>
-					<webappDirectory>src/main/webapp/VAADIN/widgetsets</webappDirectory>
-					<hostedWebapp>src/main/webapp/VAADIN/widgetsets</hostedWebapp>
-
-					<modules>
-						<module>${project.widgetset}</module>
-					</modules>
-
-					<force>true</force>
 					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
+					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
 					<noServer>true</noServer>
-					<runTarget>http://localhost:8080/gofullscreen</runTarget>
-					<port>8080</port>
-					<draftCompile>false</draftCompile>
-					<style>OBF</style>
-					<force>true</force>
+					<persistentunitcachedir>${basedir}/target/tmp/gwt-unitCache</persistentunitcachedir>
+					<compileReport>true</compileReport>
 					<strict>true</strict>
-					<compileReport>false</compileReport>
+					<runTarget>http://localhost:8080/</runTarget>
 				</configuration>
-
 				<executions>
+					<!-- You are free to mark this as permanently ignored in Eclipse -->
 					<execution>
+						<configuration>
+							<!-- if you don't specify any modules, the plugin will find them -->
+						</configuration>
 						<goals>
 							<goal>resources</goal>
 							<goal>update-widgetset</goal>
-							<goal>compile-theme</goal>
 							<goal>update-theme</goal>
+							<goal>compile-theme</goal>
 							<goal>compile</goal>
 						</goals>
 					</execution>
@@ -149,18 +142,19 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.5</version>
+				<version>2.4.1</version>
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>src/main/webapp/VAADIN</directory>
-							<includes>
-								<include>widgetsets/*/**</include>
-								<include>gwt-unitCache/**</include>
-							</includes>
-							<followSymlinks>false</followSymlinks>
+							<!-- Clean-up widgetset required for "inplace" compilation -->
+							<directory>${basedir}/src/main/webapp/VAADIN/widgetsets</directory>
+						</fileset>
+						<fileset>
+							<!-- Clean-up gwt cache -->
+							<directory>${basedir}/src/main/webapp/VAADIN/gwt-unitCache</directory>
 						</fileset>
 					</filesets>
 				</configuration>
@@ -181,6 +175,7 @@
 		<finalName>GoFullScreenDemo</finalName>
 	</build>
 
+	<!--
 	<profiles>
 		<profile>
 			<id>faster</id>
@@ -199,7 +194,6 @@
 								<module>${project.widgetset}</module>
 							</modules>
 
-							<force>true</force>
 							<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
 							<noServer>true</noServer>
 							<runTarget>http://localhost:8080/</runTarget>
@@ -227,5 +221,6 @@
 			</build>
 		</profile>
 	</profiles>
+	-->
 
 </project>
